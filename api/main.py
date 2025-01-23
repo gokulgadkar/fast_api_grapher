@@ -63,3 +63,7 @@ def generate_output(request: InvestmentRequest):
     buffer.close()
     
     return {"image_base64": img_base64}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0")
