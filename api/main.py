@@ -56,4 +56,4 @@ def generate_output(investment: float = Query(..., gt=0, description="Initial in
     img_base64 = base64.b64encode(buffer.read()).decode("utf-8")
     buffer.close()
     
-    return {"image_base64": img_base64}
+    return "data:image/png;base64,"+ str(img_base64)
