@@ -1,5 +1,4 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Query
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -13,13 +12,8 @@ app = FastAPI()
 def compound_interest(principal, rate, time):
     return principal * (1 + rate) ** time
 
-# Request body model
-class InvestmentRequest(BaseModel):
-    investment: float  # Initial investment amount
-
-@app.post("/go/")
-def generate_output(request: InvestmentRequest):
-    investment = request.investment
+@app.get("/go/")
+def generate_output(investment: float = Query(..., gt=0, description="Initial investment amount (must be greater than 0)")):
     if investment <= 0:
         raise HTTPException(status_code=400, detail="Investment amount must be greater than 0")
 
