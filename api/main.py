@@ -12,7 +12,7 @@ app = FastAPI()
 def compound_interest(principal, rate, time):
     return principal * (1 + rate) ** time
 
-@app.get("/go/")
+@app.get("/go")
 def generate_output(investment: float = Query(..., gt=0, description="Initial investment amount (must be greater than 0)")):
     if investment <= 0:
         raise HTTPException(status_code=400, detail="Investment amount must be greater than 0")
