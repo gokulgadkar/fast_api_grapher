@@ -12,6 +12,15 @@ app = FastAPI()
 def compound_interest(principal, rate, time):
     return principal * (1 + rate) ** time
 
+def abbreviate_large_numbers(x, pos):
+    if x >= 1_000_000:
+        return f"${x / 1_000_000:.1f}M"
+    elif x >= 1_000:
+        return f"${x / 1_000:.1f}k"
+    else:
+        return f"${x:.0f}"
+
+
 @app.get("/go")
 def generate_output(investment: float = Query(..., gt=0, description="Initial investment amount (must be greater than 0)")):
     if investment <= 0:
