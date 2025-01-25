@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 import io
 import base64
+from bs4 import BeautifulSoup
 
 app = FastAPI()
 
@@ -118,3 +119,54 @@ def calculate_investments(
         "lump": f"data:image/png;base64,{lump_graph}" if lump_graph else None,
         "monthly": f"data:image/png;base64,{sip_graph}" if sip_graph else None
     }
+
+@app.get("/process-html")
+def map_inline_styles_to_new_styles(
+    htm: str = Query(..., ge=0, description="Lump sum investment amount (must be greater than or equal to 0)")
+):
+# Import BeautifulSoup if not already imported
+    css_mapping = {
+    "h1": {
+        "font-size: 2rem; margin-bottom: 0.5rem; color: darkblue;": "title-large",
+    },
+    "h2": {
+        "font-size: 1.5rem; margin-bottom: 1rem; color: #333;": "subtitle",
+    },
+    "h3": {
+        "font-size: 1.25rem; margin-bottom: 1rem; color: #333;": "subtitle",
+    },
+    "p": {
+        "font-size: 1rem; line-height: 1.6; color: #121212;": "paragraph",
+    },
+    "img": {
+        "display: block; margin: 1.5rem auto; max-width: 100%; border-radius: 10px;": "responsive-image",
+    },
+    "table": {
+        "width: 100%; border-collapse: collapse; margin-top: 2rem; text-align: center; border: 1px solid #ddd;": "table-basic",
+    },
+    "th": {
+        "padding: 10px; border: 2px solid blue; background-color: darkblue; color: white;": "table-header",
+    },
+    "td": {
+        "padding: 10px; border: 2px solid darkblue;": "table-cell",
+    },
+    }
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(htm, "html.parser")
+
+    # Iterate over each tag in the mapping
+    for tag, styles in css_mapping.items():
+        elements = soup.find_all(tag)
+        # print(elements)
+        for element in elements:
+    
+                new_style = css_mapping[tag]
+                # Remove both style and class attributes
+                element.attrs.pop("style", None)
+                element.attrs.pop("class", None)
+                # Add the new style from the mapping
+                element["style"] = new_style
+                # print(element)
+
+    # Return the modified HTML
+    return str(soup)
