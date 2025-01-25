@@ -120,10 +120,11 @@ def calculate_investments(
         "monthly": f"data:image/png;base64,{sip_graph}" if sip_graph else None
     }
 
-@app.get("/process-html")
+@app.post("/process-html")
 def map_inline_styles_to_new_styles(
-    htm: str = Query(..., ge=0, description="Lump sum investment amount (must be greater than or equal to 0)")
+    html_input: str
 ):
+    htm = html_input.htm
 # Import BeautifulSoup if not already imported
     css_mapping = {
     "h1": {
