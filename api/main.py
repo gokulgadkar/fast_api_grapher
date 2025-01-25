@@ -5,6 +5,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
+from matplotlib.ticker import FuncFormatter
+import io
+import base64
 
 app = FastAPI()
 
