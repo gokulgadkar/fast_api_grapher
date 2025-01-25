@@ -124,7 +124,7 @@ def calculate_investments(
 def map_inline_styles_to_new_styles(
     html_input: str
 ):
-    htm = html_input.htm
+    htm = html_input
 # Import BeautifulSoup if not already imported
     css_mapping = {
     "h1": {
