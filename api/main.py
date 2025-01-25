@@ -6,8 +6,12 @@ from matplotlib.ticker import FuncFormatter
 import io
 import base64
 from bs4 import BeautifulSoup
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class HTMLInput(BaseModel):
+    html_content: str
 
 # Function to calculate compound interest for a lump sum investment
 def compound_interest(principal, rate, time):
@@ -122,9 +126,9 @@ def calculate_investments(
 
 @app.post("/process-html")
 def map_inline_styles_to_new_styles(
-    html_input: str
+    html_input: HTMLInput
 ):
-    htm = html_input
+    htm = html_input.html_content
 # Import BeautifulSoup if not already imported
     css_mapping = {
     "h1": {
